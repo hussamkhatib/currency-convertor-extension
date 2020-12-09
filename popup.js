@@ -1,40 +1,26 @@
-let myList = document.querySelector("#myList");
-let searchBar = document.querySelector("#searchBar");
+import "./styles.css";
+let create = document.querySelector("#create");
+let wrapper = document.querySelector("#flexContainer");
 
-let place = [];
-const char = async () => {
-  try {
-    const res = await fetch(`https://worldtimeapi.org/api/timezone/`);
-    place = await res.json();
-  } catch (err) {
-    console.error(err);
+create.addEventListener("click", createElement);
+const btn = document.createElement("button");
+function createElement() {
+  const dropdown = document.createElement("select");
+  const fragment = document.createDocumentFragment();
+  const div = document.createElement("div");
+  btn.innerText = "okay";
+  for (let i = 0; i < 3; i++) {
+    const option = document.createElement("option");
+    option.value = option.innerText = i;
+    fragment.appendChild(option);
   }
+  dropdown.appendChild(fragment);
+  div.appendChild(dropdown);
+  div.appendChild(btn);
+  div.className = "container";
+  insertBefore(div, create);
+}
 
-  let re = /[/]/;
-  let a = place;
-
-  let b = a.map((item) => {
-    const c = item.search(re);
-    return {
-      country: item.slice(c + 1),
-      continent: item.slice(0, c)
-    };
-  });
-
-  searchBar.addEventListener("keyup", (e) => {
-    const searchString = e.target.value;
-
-    const filteredCharacters = b.filter((character) => {
-      return character.country.includes(searchString);
-    });
-    let d = filteredCharacters.slice(0, 5);
-    let f = d
-      .map((item) => {
-        return `<li>${item.country}</li>`;
-      })
-      .join("");
-    myList.innerHTML = f;
-  });
-};
-
-char();
+function insertBefore(el, referenceNode) {
+  referenceNode.parentNode.insertBefore(el, referenceNode);
+}
