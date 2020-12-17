@@ -6,16 +6,20 @@ body {
   font-family: sans-serif;
 }
 input {
-  width: 30px;
+  width: 70px;
 }
 p {
   padding: 0.4em 0;
 }
 #flexContainer {
   display: flex;
+  flex-wrap: wrap;
   padding: 1em;
 }
 .container {
+  position: relative;
+  display: flex;  
+  flex-direction: column;
   border: 3px solid #e6e6e6;
   width: max-content;
   padding: 1em;
@@ -24,4 +28,9 @@ p {
 }
 #grid {
   display: grid;
+}
+.del{
+  position: absolute;
+  right: 0;
+  top: 0;
 }
