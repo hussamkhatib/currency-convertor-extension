@@ -10,6 +10,7 @@ const okay = document.createElement("button");
 
 let currencyArray = [ ]
 let currencyArray2 = [ ]
+let optionArray = [ ]
 let currencyValue = [ ]
 let activeARR = [['EUR',1.00]]
 let keys = []
@@ -26,6 +27,7 @@ async function fetchOptions() {
     const data = await resp.json()
     currencyArray = [['EUR',1.00],...Object.entries(data.rates)]
     currencyArray2 = [...currencyArray]
+    optionArray = [...currencyArray].slice(1)
     currencyValue = data.rates
     currencyValue =  Object.assign({},{'EUR':1.00},currencyValue);
     keys = Object.keys(currencyValue)
@@ -34,16 +36,16 @@ async function fetchOptions() {
 
 create.addEventListener("click", createElement);
 
-// plus
 function createElement() {
   const div = document.createElement("div");
+  // plus
   const fragment = document.createDocumentFragment();
   okay.innerText = "okay";
   dropdown.textContent = "";
   div.innerText = ''
-  for (let i = 0; i < currencyArray.length; i++) {
+  for (let i = 0; i < optionArray.length; i++) {
     const option = document.createElement("option");
-    option.value = option.innerText = currencyArray[i][0];
+    option.value = option.innerText = optionArray[i][0];
     fragment.appendChild(option);
   }
   dropdown.appendChild(fragment);
@@ -59,6 +61,9 @@ function createNewCurrency() {
   const input = document.createElement('input')
   const del = document.createElement('button')
   let text = dropdown.options[dropdown.selectedIndex].text;
+  const index = keys.map(e => e).indexOf(text)
+  const optionIndex = optionArray.map(e => e[0]).indexOf(text)
+  optionArray.splice(optionIndex,1)
   let lastDiv = wrapper.querySelector("div:last-of-type");
   div.className = 'container'
   div.appendChild(p)
@@ -69,16 +74,18 @@ function createNewCurrency() {
   del.innerHTML = trashBin
   del.className = 'del'
   wrapper.replaceChild(div, lastDiv);
-  wrapper.appendChild(create);
-  del.addEventListener('click',function(){
+  optionArray.length !==0 && wrapper.appendChild(create);
+  del.addEventListener('click',function(e){
+    let temp = del.parentNode.children[0].innerText
+    optionArray.unshift([temp])
     wrapper.removeChild(del.parentNode)
+    console.log(optionArray.length)
+    optionArray.length === 1 && wrapper.appendChild(create);
   })
   div.appendChild(del) 
   inputFields = document.querySelectorAll('input')  
   input.addEventListener('change',convert)
-  const index = keys.map(e => e).indexOf(text);
   activeARR.push(currencyArray2[index])
- 
 }
 
 function convert(e) {
@@ -94,6 +101,6 @@ function convert(e) {
   activeARR.forEach((inp,i) => {
     let index = currencyArray2.map(e => e[0]).indexOf(inp[0]);
     inputFields[i].value = currencyArray2[index][1]
-})
+  })
 }
 
