@@ -5,6 +5,8 @@ const dropdown = document.createElement("select");
 let delBtn = null
 let inputFields = document.querySelector('input')
 
+inputFields.addEventListener('change',convert)
+
 const URL = 'https://api.exchangeratesapi.io/latest'
 const okay = document.createElement("button");
 
@@ -21,8 +23,7 @@ const trashBin = `<svg width="13" height="15" viewBox="0 0 13 15" fill="none" xm
 `
 okay.addEventListener("click", createNewCurrency);
 
-fetchOptions()
-async function fetchOptions() {
+  (async () => {
     const resp = await fetch(URL)
     const data = await resp.json()
     currencyArray = [['EUR',1.00],...Object.entries(data.rates)]
@@ -30,13 +31,16 @@ async function fetchOptions() {
     optionArray = [...currencyArray].slice(1)
     currencyValue =  Object.assign({},{'EUR':1.00},data.rates);
     keys = Object.keys(currencyValue)
-}
-
+    create.disabled = false
+})().catch(err => {
+    console.error(err);
+});  
 
 create.addEventListener("click", createElement);
 
 function createElement() {
   const div = document.createElement("div");
+
   // plus
   const fragment = document.createDocumentFragment();
   okay.innerText = "okay";
@@ -89,6 +93,7 @@ function createNewCurrency() {
   div.appendChild(del) 
   inputFields = document.querySelectorAll('input')  
   input.addEventListener('change',convert)
+  
   activeARR.push(currencyArray2[index])
 }
 
@@ -104,7 +109,7 @@ function convert(e) {
   
   activeARR.forEach((inp,i) => {
     let index = currencyArray2.map(e => e[0]).indexOf(inp[0]);
-    inputFields[i].value = currencyArray2[index][1]
+    inputFields[i] &&  (inputFields[i].value = currencyArray2[index][1])
   })
   console.log('convert',{activeARR})
 }

@@ -16,7 +16,7 @@
     flex-wrap: wrap;
     padding: 1em;
   }
-  .container {
+  .container  ,#create{
     position: relative;
     display: flex;  
     flex-direction: column;
@@ -25,6 +25,7 @@
     padding: 1em;
     margin: 0 0.6em;
     border-radius: 7px;
+    justify-content: center;
   }
   #grid {
     display: grid;
@@ -34,4 +35,7 @@
     right: 0;
     top: 0;
   }
-  
+  h1{
+    text-align: center;
+  }
+ 
