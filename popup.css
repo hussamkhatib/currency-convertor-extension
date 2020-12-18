@@ -12,19 +12,20 @@ p {
   padding: 0.4em 0;
 }
 #flexContainer {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
   padding: 1em;
+  gap: 1em;
 }
-.container {
+.container  ,#create{
   position: relative;
   display: flex;  
   flex-direction: column;
   border: 3px solid #e6e6e6;
   width: max-content;
   padding: 1em;
-  margin: 0 0.6em;
   border-radius: 7px;
+  justify-content: center;
 }
 #grid {
   display: grid;
@@ -33,4 +34,9 @@ p {
   position: absolute;
   right: 0;
   top: 0;
+}
+h1{
+  text-align: center;
+  width: max-content;
+  padding: 1em;
 }

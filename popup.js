@@ -5,6 +5,8 @@ const dropdown = document.createElement("select");
 let delBtn = null
 let inputFields = document.querySelector('input')
 
+inputFields.addEventListener('change',convert)
+
 const URL = 'https://api.exchangeratesapi.io/latest'
 const okay = document.createElement("button");
 
@@ -21,23 +23,24 @@ const trashBin = `<svg width="13" height="15" viewBox="0 0 13 15" fill="none" xm
 `
 okay.addEventListener("click", createNewCurrency);
 
-fetchOptions()
-async function fetchOptions() {
+  (async () => {
     const resp = await fetch(URL)
     const data = await resp.json()
     currencyArray = [['EUR',1.00],...Object.entries(data.rates)]
     currencyArray2 = [...currencyArray]
     optionArray = [...currencyArray].slice(1)
-    currencyValue = data.rates
-    currencyValue =  Object.assign({},{'EUR':1.00},currencyValue);
+    currencyValue =  Object.assign({},{'EUR':1.00},data.rates);
     keys = Object.keys(currencyValue)
-}
-
+    create.disabled = false
+})().catch(err => {
+    console.error(err);
+});  
 
 create.addEventListener("click", createElement);
 
 function createElement() {
   const div = document.createElement("div");
+
   // plus
   const fragment = document.createDocumentFragment();
   okay.innerText = "okay";
@@ -56,19 +59,22 @@ function createElement() {
 }
 
 function createNewCurrency() {
+
   const div = document.createElement("div");
   const p = document.createElement('p')
   const input = document.createElement('input')
   const del = document.createElement('button')
+  
   let text = dropdown.options[dropdown.selectedIndex].text;
   const index = keys.map(e => e).indexOf(text)
   const optionIndex = optionArray.map(e => e[0]).indexOf(text)
   optionArray.splice(optionIndex,1)
+
   let lastDiv = wrapper.querySelector("div:last-of-type");
   div.className = 'container'
   div.appendChild(p)
   p.innerText = text 
-  input.value = currencyValue[text]
+  input.value = currencyArray2[index][1]
   input.type = 'number'
   div.appendChild(input) 
   del.innerHTML = trashBin
@@ -77,14 +83,17 @@ function createNewCurrency() {
   optionArray.length !==0 && wrapper.appendChild(create);
   del.addEventListener('click',function(e){
     let temp = del.parentNode.children[0].innerText
+    const index = activeARR.map(e=>e[0]).indexOf(temp)
     optionArray.unshift([temp])
+    activeARR.splice(index,1)
     wrapper.removeChild(del.parentNode)
-    console.log(optionArray.length)
     optionArray.length === 1 && wrapper.appendChild(create);
+    console.log(activeARR)
   })
   div.appendChild(del) 
   inputFields = document.querySelectorAll('input')  
   input.addEventListener('change',convert)
+  
   activeARR.push(currencyArray2[index])
 }
 
@@ -100,6 +109,7 @@ function convert(e) {
   
   activeARR.forEach((inp,i) => {
     let index = currencyArray2.map(e => e[0]).indexOf(inp[0]);
-    inputFields[i].value = currencyArray2[index][1]
+    inputFields[i] &&  (inputFields[i].value = currencyArray2[index][1])
   })
+  console.log('convert',{activeARR})
 }

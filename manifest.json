@@ -1,12 +1,13 @@
 {
     "manifest_version": 2,
-    "name": "Hello Extensions",
-    "description" : "Base Level Extension",
-    "version": "0.1.0", 
+    "name": "Currency convertor",
+    "description" : "convert 33 different types of currencies ",
+    "version": "1.0.0", 
     "browser_action": {
       "default_popup": "index.html",
-      "default_icon": "hello_extensions.png"
-    },
-    "permissions": ["activeTab","declarativeContent","storage"]
-
+      "default_icon": {
+        "16": "icons/icon16.png",
+        "32": "icons/icon32.png"
+      }
+    }
   }
