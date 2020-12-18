@@ -28,8 +28,7 @@ async function fetchOptions() {
     currencyArray = [['EUR',1.00],...Object.entries(data.rates)]
     currencyArray2 = [...currencyArray]
     optionArray = [...currencyArray].slice(1)
-    currencyValue = data.rates
-    currencyValue =  Object.assign({},{'EUR':1.00},currencyValue);
+    currencyValue =  Object.assign({},{'EUR':1.00},data.rates);
     keys = Object.keys(currencyValue)
 }
 
@@ -56,19 +55,22 @@ function createElement() {
 }
 
 function createNewCurrency() {
+
   const div = document.createElement("div");
   const p = document.createElement('p')
   const input = document.createElement('input')
   const del = document.createElement('button')
+  
   let text = dropdown.options[dropdown.selectedIndex].text;
   const index = keys.map(e => e).indexOf(text)
   const optionIndex = optionArray.map(e => e[0]).indexOf(text)
   optionArray.splice(optionIndex,1)
+
   let lastDiv = wrapper.querySelector("div:last-of-type");
   div.className = 'container'
   div.appendChild(p)
   p.innerText = text 
-  input.value = currencyValue[text]
+  input.value = currencyArray2[index][1]
   input.type = 'number'
   div.appendChild(input) 
   del.innerHTML = trashBin
@@ -77,10 +79,12 @@ function createNewCurrency() {
   optionArray.length !==0 && wrapper.appendChild(create);
   del.addEventListener('click',function(e){
     let temp = del.parentNode.children[0].innerText
+    const index = activeARR.map(e=>e[0]).indexOf(temp)
     optionArray.unshift([temp])
+    activeARR.splice(index,1)
     wrapper.removeChild(del.parentNode)
-    console.log(optionArray.length)
     optionArray.length === 1 && wrapper.appendChild(create);
+    console.log(activeARR)
   })
   div.appendChild(del) 
   inputFields = document.querySelectorAll('input')  
@@ -102,5 +106,6 @@ function convert(e) {
     let index = currencyArray2.map(e => e[0]).indexOf(inp[0]);
     inputFields[i].value = currencyArray2[index][1]
   })
+  console.log('convert',{activeARR})
 }
 
